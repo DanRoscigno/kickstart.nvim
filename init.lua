@@ -56,7 +56,7 @@ require('packer').startup(function(use)
         motherTongue = "en",
       },
       disabledRules = {
-        fr = { "APOS_TYP", "FRENCH_WHITESPACE" }
+        en = { "EN_QUOTES" }
       },
       dictionary = (function()
         -- For dictionary, search for files in the runtime to have
