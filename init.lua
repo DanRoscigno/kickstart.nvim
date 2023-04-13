@@ -37,6 +37,54 @@ require('packer').startup(function(use)
     },
   }
 
+-- use ltex-ls as the languageserver for languagetool 
+  use { 'vigoux/ltex-ls.nvim' }
+
+  require 'ltex-ls'.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  use_spellfile = false,
+  filetypes = { "latex", "tex", "bib", "markdown", "gitcommit", "text" },
+  settings = {
+    ltex = {
+      enabled = { "latex", "tex", "bib", "markdown", },
+      language = "en",
+      diagnosticSeverity = "information",
+      sentenceCacheSize = 2000,
+      additionalRules = {
+        enablePickyRules = true,
+        motherTongue = "en",
+      },
+      disabledRules = {
+        fr = { "APOS_TYP", "FRENCH_WHITESPACE" }
+      },
+      dictionary = (function()
+        -- For dictionary, search for files in the runtime to have
+        -- and include them as externals the format for them is
+        -- dict/{LANG}.txt
+        --
+        -- Also add dict/default.txt to all of them
+        local files = {}
+        for _, file in ipairs(vim.api.nvim_get_runtime_file("dict/*", true)) do
+          local lang = vim.fn.fnamemodify(file, ":t:r")
+          local fullpath = vim.fs.normalize(file, ":p")
+          files[lang] = { ":" .. fullpath }
+        end
+
+        if files.default then
+          for lang, _ in pairs(files) do
+            if lang ~= "default" then
+              vim.list_extend(files[lang], files.default)
+            end
+          end
+          files.default = nil
+        end
+        return files
+      end)(),
+    },
+  },
+}
+
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
     requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
@@ -74,8 +122,6 @@ require('packer').startup(function(use)
   -- filetype plugin allows me to associate mdx files with markdown
   use { 'nathom/filetype.nvim' }
 
-  -- grammar-guard (uses ltex-ls)
-  use { 'brymer-meneses/grammar-guard.nvim' }
 
   -- Add custom plugins to packer from /nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
@@ -385,7 +431,7 @@ require('mason').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { 'ltex', 'marksman', 'pyright', 'tsserver', 'sumneko_lua' }
+local servers = { 'marksman', 'pyright', 'tsserver', 'lua_ls' }
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
@@ -413,7 +459,7 @@ local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
 
-require('lspconfig').sumneko_lua.setup {
+require('lspconfig').lua_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -476,29 +522,6 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
-require("grammar-guard").init()
-
--- setup LSP config
-require("lspconfig").grammar_guard.setup({
-  cmd = { '/home/droscigno/.local/share/nvim/mason/packages/ltex-ls/ltex-ls/bin/ltex-ls' },
-	settings = {
-		ltex = {
-			enabled = { "latex", "tex", "bib", "markdown" },
-			language = "en",
-			diagnosticSeverity = "information",
-			setenceCacheSize = 2000,
-			additionalRules = {
-				enablePickyRules = true,
-				motherTongue = "en",
-			},
-			trace = { server = "verbose" },
-			dictionary = {},
-			disabledRules = {},
-			hiddenFalsePositives = {},
-		},
-	},
-})
 
 -- Use Marksman for markdown
 require'lspconfig'.marksman.setup{}
