@@ -40,50 +40,7 @@ require('packer').startup(function(use)
 -- use ltex-ls as the languageserver for languagetool 
   use { 'vigoux/ltex-ls.nvim' }
 
-  require 'ltex-ls'.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  use_spellfile = false,
-  filetypes = { "latex", "tex", "bib", "markdown", "gitcommit", "text" },
-  settings = {
-    ltex = {
-      enabled = { "latex", "tex", "bib", "markdown", },
-      language = "en",
-      diagnosticSeverity = "information",
-      sentenceCacheSize = 2000,
-      additionalRules = {
-        enablePickyRules = true,
-        motherTongue = "en",
-      },
-      disabledRules = {
-        en = { "EN_QUOTES" }
-      },
-      dictionary = (function()
-        -- For dictionary, search for files in the runtime to have
-        -- and include them as externals the format for them is
-        -- dict/{LANG}.txt
-        --
-        -- Also add dict/default.txt to all of them
-        local files = {}
-        for _, file in ipairs(vim.api.nvim_get_runtime_file("dict/*", true)) do
-          local lang = vim.fn.fnamemodify(file, ":t:r")
-          local fullpath = vim.fs.normalize(file, ":p")
-          files[lang] = { ":" .. fullpath }
-        end
-
-        if files.default then
-          for lang, _ in pairs(files) do
-            if lang ~= "default" then
-              vim.list_extend(files[lang], files.default)
-            end
-          end
-          files.default = nil
-        end
-        return files
-      end)(),
-    },
-  },
-}
+use { "ellisonleao/gruvbox.nvim" }
 
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -107,7 +64,6 @@ require('packer').startup(function(use)
   use 'tpope/vim-rhubarb'
   use 'lewis6991/gitsigns.nvim'
 
-  use 'navarasu/onedark.nvim' -- Theme inspired by Atom
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
   use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
@@ -199,18 +155,10 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
-vim.cmd [[colorscheme onedark]]
+vim.cmd [[colorscheme gruvbox]]
 -- show cursorline and column (set these after the colorscheme!)
 vim.o.cursorline = true
 vim.o.cursorcolumn = true
--- vim.cmd[[highlight CursorColumn ctermbg=0 guibg=lightgrey]]
---vim.cmd[[highlight CursorLine ctermfg=White ctermbg=Yellow cterm=bold guifg=white guibg=slategray gui=bold]]
---vim.cmd[[highlight CursorColumn ctermfg=White ctermbg=Yellow cterm=bold guifg=white guibg=slategray gui=bold]]
--- vim.cmhighlight guibg=#000050 guifg=fg guibg=#000050 guifg=fg [[highlight CursorLine ctermfg=White ctermbg=Yellow cterm=bold guifg=white guibg=slategray gui=bold]]
---
--- highlight CursorColumn ctermfg=White ctermbg=Yellow cterm=bold guifg=white guibg=yellow gui=bold
--- highlight CursorLine guibg=#000050 guifg=fg
--- highlight CursorColumn ctermfg=White ctermbg=Yellow cterm=bold guifg=white guibg=yellow gui=bold
 --
 
 -- Set completeopt to have a better completion experience
@@ -247,11 +195,19 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 require('lualine').setup {
   options = {
     icons_enabled = false,
-    theme = 'onedark',
+    theme = 'gruvbox',
     component_separators = '|',
     section_separators = '',
   },
 }
+
+-- GRUVBOX
+require("gruvbox").setup({
+	contrast = "hard",
+	palette_overrides = {
+		gray = "#2ea542", -- comments are green and by that I mean GREEN
+	}
+})
 
 -- Enable Comment.nvim
 require('Comment').setup()
@@ -442,6 +398,51 @@ require('mason-lspconfig').setup {
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
+require 'ltex-ls'.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  use_spellfile = false,
+  filetypes = { "latex", "tex", "bib", "markdown", "gitcommit", "text" },
+  settings = {
+    ltex = {
+      enabled = { "latex", "tex", "bib", "markdown", },
+      language = "en",
+      diagnosticSeverity = "information",
+      sentenceCacheSize = 2000,
+      additionalRules = {
+        enablePickyRules = true,
+        motherTongue = "en",
+      },
+      disabledRules = {
+        en = { "EN_QUOTES" }
+      },
+      dictionary = (function()
+        -- For dictionary, search for files in the runtime to have
+        -- and include them as externals the format for them is
+        -- dict/{LANG}.txt
+        --
+        -- Also add dict/default.txt to all of them
+        local files = {}
+        for _, file in ipairs(vim.api.nvim_get_runtime_file("dict/*", true)) do
+          local lang = vim.fn.fnamemodify(file, ":t:r")
+          local fullpath = vim.fs.normalize(file, ":p")
+          files[lang] = { ":" .. fullpath }
+        end
+
+        if files.default then
+          for lang, _ in pairs(files) do
+            if lang ~= "default" then
+              vim.list_extend(files[lang], files.default)
+            end
+          end
+          files.default = nil
+        end
+        return files
+      end)(),
+    },
+  },
+}
+
 for _, lsp in ipairs(servers) do
   require('lspconfig')[lsp].setup {
     on_attach = on_attach,
@@ -540,9 +541,7 @@ local diagconfig = {
   -- disable virtual text
   virtual_text = false,
   -- show signs
-  signs = {
-    active = signs,
-  },
+  signs = true,
   update_in_insert = true,
   underline = true,
   severity_sort = true,
