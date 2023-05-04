@@ -120,10 +120,20 @@ _G.packer_plugins = {
     path = "/home/droscigno/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
   },
+  gruvbox = {
+    loaded = true,
+    path = "/home/droscigno/.local/share/nvim/site/pack/packer/start/gruvbox",
+    url = "https://github.com/ellisonleao/gruvbox"
+  },
   ["indent-blankline.nvim"] = {
     loaded = true,
     path = "/home/droscigno/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
     url = "https://github.com/lukas-reineke/indent-blankline.nvim"
+  },
+  ["ltex-ls.nvim"] = {
+    loaded = true,
+    path = "/home/droscigno/.local/share/nvim/site/pack/packer/start/ltex-ls.nvim",
+    url = "https://github.com/vigoux/ltex-ls.nvim"
   },
   ["lualine.nvim"] = {
     loaded = true,
@@ -166,11 +176,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/droscigno/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
     url = "https://github.com/nvim-tree/nvim-web-devicons"
-  },
-  ["onedark.nvim"] = {
-    loaded = true,
-    path = "/home/droscigno/.local/share/nvim/site/pack/packer/start/onedark.nvim",
-    url = "https://github.com/navarasu/onedark.nvim"
   },
   ["packer.nvim"] = {
     loaded = true,
