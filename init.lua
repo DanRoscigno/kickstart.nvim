@@ -525,7 +525,12 @@ cmp.setup {
 }
 
 -- Use Marksman for markdown
-require'lspconfig'.marksman.setup{}
+require'lspconfig'.marksman.setup{
+    settings = {
+      root_files = { ".marksman.toml", },
+      filetypes = { ".md", ".mdx", "markdown" },
+    },
+}
 
 -- Set the filetype of *.mdx files to markdown
 require("filetype").setup({
