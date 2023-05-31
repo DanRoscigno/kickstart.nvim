@@ -75,9 +75,6 @@ use { "ellisonleao/gruvbox.nvim" }
   -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
 
-  -- filetype plugin allows me to associate mdx files with markdown
-  use { 'nathom/filetype.nvim' }
-
 
   -- Add custom plugins to packer from /nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
@@ -531,15 +528,6 @@ require'lspconfig'.marksman.setup{
       filetypes = { ".md", ".mdx", "markdown" },
     },
 }
-
--- Set the filetype of *.mdx files to markdown
-require("filetype").setup({
-    overrides = {
-        extensions = {
-            mdx = "markdown",
-        },
-   },
-})
 
 -- change the way that diagnostics are displayed
 local diagconfig = {
