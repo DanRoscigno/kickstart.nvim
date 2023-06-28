@@ -613,12 +613,7 @@ vim.o.cursorline = true
 vim.o.cursorcolumn = true
 
 require('onedark').setup {
-    colors = {
-        cursor_line_nr_white = "#ffffff", -- define a new color
-    },
-    highlights = {
-        ["CursorLineNr"] = { fg = '$cursor_line_nr_white' },
-    }
+    style = 'warmer',
 }
 require('onedark').load()
 
