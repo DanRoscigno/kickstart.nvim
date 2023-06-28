@@ -224,7 +224,7 @@ vim.o.mouse = 'a'
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.o.clipboard = 'unnamedplus'
+-- vim.o.clipboard = 'unnamedplus'
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -607,6 +607,20 @@ vim.diagnostic.config(diagconfig)
 -- When searching, scroll text so that there
 -- are at least 5 lines above and below result
 vim.o.scrolloff = 5
+
+-- I need to see the cursor
+vim.o.cursorline = true
+vim.o.cursorcolumn = true
+
+require('onedark').setup {
+    colors = {
+        cursor_line_nr_white = "#ffffff", -- define a new color
+    },
+    highlights = {
+        ["CursorLineNr"] = { fg = '$cursor_line_nr_white' },
+    }
+}
+require('onedark').load()
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
