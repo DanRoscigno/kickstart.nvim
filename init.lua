@@ -142,6 +142,14 @@ require('lazy').setup({
   },
 
   {
+    -- Vale linter
+    "dense-analysis/ale",
+    config = function()
+      require("config.ale")
+    end,
+  },
+
+  {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`

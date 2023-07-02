@@ -37,6 +37,8 @@ g.ale_lint_on_text_changed = "never"
 g.ale_linters_explicit = 1
 g.ale_maximum_file_size = 102400 -- 100KB
 g.ale_use_neovim_diagnostics_api = 1
+g.ale_float_preview = 1
+g.ale_virtualtext_cursor = 'disabled'
 
 -- ALE fix mapping.
 vim.api.nvim_set_keymap("n", "'f", "<Plug>(ale_fix)", { silent = true })
