@@ -6,11 +6,11 @@ cd ~/Downloads/vale_2.27.0_Linux_64-bit
 sudo mv vale /usr/local/bin/
 ```
 
-Install mdl and write-good
+Install mdl
 
 ```bash
 gem install mdl
-npm install -g write-good
+sudo mv ~/bin/mdl /usr/local/bin/
 ```
 
 
